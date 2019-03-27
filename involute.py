@@ -91,7 +91,10 @@ def genCircleCutouts(bm, radius, numteeth, gear, mygear, shaftdiam, ob, scene):
     circles = []
         
     def circle(p, r):
-        circles.append([p, r])
+        circles.append([p, r, False, 0.0])
+        
+    def keyedcircle(p, r, keydepth):
+        circles.append([p, r, True, keydepth])
         
     def circle_isect(p, r, margin=0.0005):
         for c in circles:
@@ -154,7 +157,10 @@ def genCircleCutouts(bm, radius, numteeth, gear, mygear, shaftdiam, ob, scene):
 
     dt = (2*pi)/steps
     
-    circle(Vector(), shaftdiam*0.5)
+    if getprop(ob, scene, "key_shaft"):
+        keyedcircle(Vector(), shaftdiam*0.5, getprop(ob, scene, "key_depth"));
+    else:
+        circle(Vector(), shaftdiam*0.5)
     
     if getprop(ob, scene, "no_cutouts"):
         return circles if getprop(ob, scene, "genshaft") else []
@@ -173,7 +179,7 @@ def genCircleCutouts(bm, radius, numteeth, gear, mygear, shaftdiam, ob, scene):
         circles = circles[1:]
             
     csteps = 64
-    for p, r in circles:
+    for p, r, dokey, keydepth in circles:
         t = -pi
         df = (2*pi) / csteps
         vs = []
@@ -181,6 +187,9 @@ def genCircleCutouts(bm, radius, numteeth, gear, mygear, shaftdiam, ob, scene):
             x = sin(t)*r + p[0]
             y = cos(t)*r + p[1]
             z = p[2]
+            
+            if dokey and r-y < keydepth*r:
+                y = r - keydepth*r;
             
             vs.append(bm.verts.new(Vector([x, y, z])))
             t += df

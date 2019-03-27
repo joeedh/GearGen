@@ -65,6 +65,8 @@ PropNames = [
     "backlash",
     "no_cutouts",
     "pressure_angle",
+    "key_shaft",
+    "key_depth"
 ]
 
 PropBits = {}
@@ -96,59 +98,62 @@ def getprop(object, scene, name):
         return getattr(scene.geargen, name)
         
 class GearGenProfile (bpy.types.PropertyGroup):
-    local_overrides = bpy.props.EnumProperty(items=_enumdef, name="overrides", options={"ENUM_FLAG"}, update=on_prop_update)
+    local_overrides: bpy.props.EnumProperty(items=_enumdef, name="overrides", options={"ENUM_FLAG"}, update=on_prop_update)
     
-    version = bpy.props.FloatProperty(default=CURRENT_VERSION)
+    key_shaft : bpy.props.BoolProperty(default=False)
+    key_depth : bpy.props.FloatProperty(default=0.45)
     
-    auto_generate = bpy.props.BoolProperty(default=False)
+    version: bpy.props.FloatProperty(default=CURRENT_VERSION)
     
-    depth = bpy.props.FloatProperty(default=1.0, update=on_prop_update)
-    thickness = bpy.props.FloatProperty(default=4, update=on_prop_update)
-    modulus = bpy.props.FloatProperty(default=-1.0, update=on_prop_update)
+    auto_generate: bpy.props.BoolProperty(default=False)
+    
+    depth: bpy.props.FloatProperty(default=1.0, update=on_prop_update)
+    thickness: bpy.props.FloatProperty(default=4, update=on_prop_update)
+    modulus: bpy.props.FloatProperty(default=-1.0, update=on_prop_update)
 
-    init = bpy.props.BoolProperty(update=on_prop_update)
+    init: bpy.props.BoolProperty(update=on_prop_update)
 
-    enabled = bpy.props.BoolProperty(update=on_prop_update)
-    genshaft = bpy.props.BoolProperty(update=on_prop_update)
-    shaft_diameter = bpy.props.FloatProperty(default=4, update=on_prop_update)
-    zoff = bpy.props.FloatProperty(update=on_prop_update)
+    enabled: bpy.props.BoolProperty(update=on_prop_update)
+    genshaft: bpy.props.BoolProperty(update=on_prop_update)
+    shaft_diameter: bpy.props.FloatProperty(default=4, update=on_prop_update)
+    zoff: bpy.props.FloatProperty(update=on_prop_update)
     
-    spacer_on = bpy.props.BoolProperty(default=True, update=on_prop_update)
-    spacer_width = bpy.props.FloatProperty(default=1.5, update=on_prop_update)
-    spacer_thick = bpy.props.FloatProperty(default=1, update=on_prop_update)
-    spacer_height = bpy.props.FloatProperty(default=1.5, update=on_prop_update)
+    spacer_on: bpy.props.BoolProperty(default=True, update=on_prop_update)
+    spacer_width: bpy.props.FloatProperty(default=1.5, update=on_prop_update)
+    spacer_thick: bpy.props.FloatProperty(default=1, update=on_prop_update)
+    spacer_height: bpy.props.FloatProperty(default=1.5, update=on_prop_update)
     
-    xy_scale = bpy.props.FloatProperty(default=1.0, update=on_prop_update)
+    xy_scale: bpy.props.FloatProperty(default=1.0, update=on_prop_update)
  
-    double_helical = bpy.props.BoolProperty(update=on_prop_update)
-    helical_angle = bpy.props.FloatProperty(default=1.0, update=on_prop_update)
-    subdivisions = bpy.props.IntProperty(default=8, update=on_prop_update)
+    double_helical: bpy.props.BoolProperty(update=on_prop_update)
+    helical_angle: bpy.props.FloatProperty(default=1.0, update=on_prop_update)
+    subdivisions: bpy.props.IntProperty(default=8, update=on_prop_update)
 
-    taper_on = bpy.props.BoolProperty(update=on_prop_update)
-    taper_amount = bpy.props.FloatProperty(default=0.75, update=on_prop_update)
-    taper_height = bpy.props.FloatProperty(default=1.25, update=on_prop_update)
+    taper_on: bpy.props.BoolProperty(update=on_prop_update)
+    taper_amount: bpy.props.FloatProperty(default=0.75, update=on_prop_update)
+    taper_height: bpy.props.FloatProperty(default=1.25, update=on_prop_update)
 
-    invert_helical = bpy.props.BoolProperty(default=False, update=on_prop_update) #local property
+    invert_helical: bpy.props.BoolProperty(default=False, update=on_prop_update) #local property
 
-    herringchannel_on = bpy.props.BoolProperty(default=False, update=on_prop_update)
-    herringchannel_width = bpy.props.FloatProperty(default=0.5, update=on_prop_update)
-    herringchannel_blend = bpy.props.FloatProperty(default=0.5, update=on_prop_update)
-    herringchannel_depth = bpy.props.FloatProperty(default=1.0, update=on_prop_update)
+    herringchannel_on: bpy.props.BoolProperty(default=False, update=on_prop_update)
+    herringchannel_width: bpy.props.FloatProperty(default=0.5, update=on_prop_update)
+    herringchannel_blend: bpy.props.FloatProperty(default=0.5, update=on_prop_update)
+    herringchannel_depth: bpy.props.FloatProperty(default=1.0, update=on_prop_update)
     
-    inner_gear_mode = bpy.props.BoolProperty(default=False, update=on_prop_update) #local property
-    inner_gear_depth = bpy.props.FloatProperty(default=4.0, update=on_prop_update)
+    inner_gear_mode: bpy.props.BoolProperty(default=False, update=on_prop_update) #local property
+    inner_gear_depth: bpy.props.FloatProperty(default=4.0, update=on_prop_update)
 
-    herring_shape = bpy.props.EnumProperty(default="TRIANGLE", items=HerringShapes, update=on_prop_update)
+    herring_shape: bpy.props.EnumProperty(default="TRIANGLE", items=HerringShapes, update=on_prop_update)
     
-    helical_on = bpy.props.BoolProperty(default=False, update=on_prop_update);
+    helical_on: bpy.props.BoolProperty(default=False, update=on_prop_update);
     
-    backlash = bpy.props.FloatProperty(default=0.05, update=on_prop_update)
-    pitch_out = bpy.props.FloatProperty(default=-1) #used to tell the user final pitch circle radius
-    numteeth = bpy.props.IntProperty(default=9, update=on_prop_update) #tell user what final number of teeth are, unless use_numteeth is true in which case this is the number of teeth
-    use_numteeth = bpy.props.BoolProperty(default=False, update=on_prop_update);
-    no_cutouts = bpy.props.BoolProperty(default=False, update=on_prop_update);
+    backlash: bpy.props.FloatProperty(default=0.05, update=on_prop_update)
+    pitch_out: bpy.props.FloatProperty(default=-1) #used to tell the user final pitch circle radius
+    numteeth: bpy.props.IntProperty(default=9, update=on_prop_update) #tell user what final number of teeth are, unless use_numteeth is true in which case this is the number of teeth
+    use_numteeth: bpy.props.BoolProperty(default=False, update=on_prop_update);
+    no_cutouts: bpy.props.BoolProperty(default=False, update=on_prop_update);
     
-    pressure_angle = bpy.props.FloatProperty(default=20, update=on_prop_update)
+    pressure_angle: bpy.props.FloatProperty(default=20, update=on_prop_update)
     
     def set_defaults(self):
         self.init = True
@@ -179,7 +184,7 @@ def objectprop(context, layout, prop):
         row2.enabled = False
         
     row2.prop(context.object.geargen, prop)
-    row.prop_enum(context.object.geargen, "local_overrides", prop, "", icon=icon)
+    row.prop_enum(context.object.geargen, "local_overrides", prop, text="", icon=icon)
 
 def uifunc(self, context, gear):
     row = self.layout
@@ -187,10 +192,10 @@ def uifunc(self, context, gear):
     col = self.layout.column()
     col.prop(context.object.geargen, "enabled")
     
-    col.label("Information")
+    col.label(text="Information")
     col.prop(context.object.geargen, "pitch_out")
     
-    col.label("Local settings")
+    col.label(text="Local settings")
     
     row = col.row()
     
@@ -202,7 +207,7 @@ def uifunc(self, context, gear):
     col2.prop(context.object.geargen, "invert_helical")
     col2.prop(context.object.geargen, "inner_gear_depth")
         
-    col.label("Overrides")
+    col.label(text="Overrides")
 
     row = col.row()
 
@@ -222,13 +227,26 @@ def uifunc(self, context, gear):
     objectprop(context, col2, "backlash")
     objectprop(context, col2, "helical_angle")
 
-    objectprop(context, col2, "genshaft")
-    objectprop(context, col2, "spacer_on")
-    objectprop(context, col2, "spacer_width")
-    objectprop(context, col2, "spacer_thick")
-    objectprop(context, col2, "spacer_height")
-    objectprop(context, col2, "shaft_diameter")
-    objectprop(context, col2, "no_cutouts")
+    row2 = col2.column()
+    objectprop(context, row2, "genshaft")
+    objectprop(context, row2, "shaft_diameter")
+    
+    row2 = col2.column()
+    objectprop(context, row2, "key_shaft")
+    
+    row2 = col2.column()
+    row2.enabled = gear.key_shaft
+    
+    objectprop(context, row2, "key_depth")
+    
+    row2 = col2.column()
+    objectprop(context, row2, "spacer_on")
+    objectprop(context, row2, "spacer_width")
+    objectprop(context, row2, "spacer_thick")
+    objectprop(context, row2, "spacer_height")
+
+    row2 = col2.column()
+    objectprop(context, row2, "no_cutouts")
         
     row = col.column()
     row.operator("object.geargen_recalc_all_gears")
@@ -268,7 +286,16 @@ class SceneGearPanel(bpy.types.Panel):
         col.prop(context.scene.geargen, "pressure_angle")
         col.prop(context.scene.geargen, "spacer_on");
         
-        col.label("Herringbone Mode")
+        col.label(text="Shaft")
+        col.prop(context.scene.geargen, "genshaft");
+        
+        col2 = col.column()
+        col2.enabled = context.scene.geargen.genshaft;
+        col2.prop(context.scene.geargen, "shaft_diameter");
+        col2.prop(context.scene.geargen, "key_shaft");
+        col2.prop(context.scene.geargen, "key_depth");
+        
+        col.label(text="Herringbone Mode")
         col.prop(context.scene.geargen, "double_helical")
         col.prop(context.scene.geargen, "helical_angle")
         col.prop(context.scene.geargen, "subdivisions")
