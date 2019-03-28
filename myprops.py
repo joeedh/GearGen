@@ -286,6 +286,9 @@ class SceneGearPanel(bpy.types.Panel):
         col.prop(context.scene.geargen, "pressure_angle")
         col.prop(context.scene.geargen, "spacer_on");
         
+        col.label(text="Cutouts")
+        col.prop(context.scene.geargen, "no_cutouts");
+        
         col.label(text="Shaft")
         col.prop(context.scene.geargen, "genshaft");
         

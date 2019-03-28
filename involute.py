@@ -151,32 +151,26 @@ def genCircleCutouts(bm, radius, numteeth, gear, mygear, shaftdiam, ob, scene):
         circles[:] = []
         return minsteps
     
-    steps = 1 if getprop(ob, scene, "no_cutouts") else find_number_of_circles()
+    if getprop(ob, scene, "genshaft"):
+        if getprop(ob, scene, "key_shaft"):
+            keyedcircle(Vector(), shaftdiam*0.5, getprop(ob, scene, "key_depth"));
+        else:
+            circle(Vector(), shaftdiam*0.5)
     
-    t = -pi
-
-    dt = (2*pi)/steps
-    
-    if getprop(ob, scene, "key_shaft"):
-        keyedcircle(Vector(), shaftdiam*0.5, getprop(ob, scene, "key_depth"));
-    else:
-        circle(Vector(), shaftdiam*0.5)
-    
-    if getprop(ob, scene, "no_cutouts"):
-        return circles if getprop(ob, scene, "genshaft") else []
+    if not getprop(ob, scene, "no_cutouts"):
+        steps = find_number_of_circles()
+        t = -pi
+        dt = (2*pi)/steps
         
-    for i in range(steps):
-        p = Vector()
-        p[0] = sin(t)*r2
-        p[1] = cos(t)*r2
-        p[2] = 0
-        
-        if not circle_isect(p, r3):
-            circle(p, r3)
-        t += dt
-    
-    if not getprop(ob, scene, "genshaft"): #remove shaft circle
-        circles = circles[1:]
+        for i in range(steps):
+            p = Vector()
+            p[0] = sin(t)*r2
+            p[1] = cos(t)*r2
+            p[2] = 0
+            
+            if not circle_isect(p, r3):
+                circle(p, r3)
+            t += dt
             
     csteps = 64
     for p, r, dokey, keydepth in circles:
@@ -434,6 +428,9 @@ def genGear(ob, scene):
                 
                 if v == startv: break
                 _i += 1
+            
+            if _i == 10000000:
+                print("error: infinite loop in gear gen code")
                 
         z += dz
     
