@@ -4,7 +4,7 @@ bl_info = {
     "version": (0, 3),
     "blender": (2, 80, 0),
     "location": "Properties > Object > GearGen",
-    "description": "Generates gears, based on object sizes.  Replaces existing mesh data.",
+    "description": "Generates gears.  Replaces existing mesh data.",
     "warning": "",
     "wiki_url": "",
     "category": "Mesh",
