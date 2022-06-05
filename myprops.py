@@ -290,6 +290,13 @@ class SceneGearPanel(bpy.types.Panel):
     bl_context = "scene"
 
     def draw(self, context):
+        box = self.layout.box()
+        box.prop(context.scene.geargen, "paste_local_settings", text="Paste Local Settings")
+
+        row = box.row()
+        row.operator("scene.geargen_copy_settings")
+        row.operator("scene.geargen_paste_settings")
+
         row = self.layout.row()
         col = row.column()
         

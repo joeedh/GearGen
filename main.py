@@ -70,8 +70,10 @@ class CopyGearSettings(bpy.types.Operator):
         return context.active_object is not None
 
     def execute(self, context):
-        ob = context.active_object
-        geargen = ob.geargen
+        if type(self) == CopyGearSettings:
+            geargen = context.active_object.geargen
+        else:
+            geargen = context.scene.geargen
 
         clipboard.clear()
 
@@ -83,6 +85,13 @@ class CopyGearSettings(bpy.types.Operator):
 
         return {'FINISHED'}
 
+class SceneCopyGearSettings(CopyGearSettings):
+    """Tooltip"""
+    bl_idname = "scene.geargen_copy_settings"
+    
+    @classmethod
+    def poll(cls, context):
+        return context.scene is not None
 
 class PasteGearSettings(bpy.types.Operator):
     """Tooltip"""
@@ -95,8 +104,10 @@ class PasteGearSettings(bpy.types.Operator):
         return context.active_object is not None
 
     def execute(self, context):
-        ob = context.active_object
-        geargen = ob.geargen
+        if type(self) == PasteGearSettings:
+            geargen = context.active_object.geargen
+        else:
+            geargen = context.scene.geargen
 
         geargen.local_overrides = set()
 
@@ -124,7 +135,24 @@ class PasteGearSettings(bpy.types.Operator):
         
         return {'FINISHED'}
 
-bpy_classes = [RecalcAllGears, CopyGearSettings, PasteGearSettings, RecalcGear]
+class ScenePasteGearSettings(PasteGearSettings):
+    """Tooltip"""
+    bl_idname = "scene.geargen_paste_settings"
+    bl_label = "Paste"
+    bl_options = {'UNDO'}
+    
+    @classmethod
+    def poll(cls, context):
+        return context.scene is not None
+
+bpy_classes = [
+    RecalcAllGears, 
+    CopyGearSettings, 
+    PasteGearSettings,
+    RecalcGear,
+    SceneCopyGearSettings,
+    ScenePasteGearSettings,
+]
 
 registered = False
 def register():
