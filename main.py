@@ -103,6 +103,9 @@ class SceneCopyGearSettings(bpy.types.Operator, CopyGearSettingsBase):
 class PasteGearSettingsBase:
     bl_label = "Paste"
 
+    def can_paste_unused(self, context):
+        return True
+
     def execute(self, context):
         if type(self) == PasteGearSettings:
             geargen = context.active_object.geargen
@@ -118,12 +121,14 @@ class PasteGearSettingsBase:
         for prop, item in clipboard.props.items():
             print(prop, item)
 
-            setattr(geargen, prop, item[1])
-
-            # don't set override flags for non props
+            if not item[0] and not self.can_paste_unused(context):
+                continue
+            
             if prop in myprops.NonPropNames:
                 continue
 
+            setattr(geargen, prop, item[1])
+            
             if item[0] and prop not in geargen.local_overrides:
                 # bug in BPY, doesn't work
                 # geargen.local_overrides.add(prop) 
@@ -141,6 +146,9 @@ class PasteGearSettings(bpy.types.Operator, PasteGearSettingsBase):
     bl_label = "Paste"
     bl_options = {'UNDO'}
     
+    def can_paste_unused(self, context):
+        return True
+
     @classmethod
     def poll(cls, context):
         return context.active_object is not None
@@ -151,6 +159,9 @@ class ScenePasteGearSettings(bpy.types.Operator, PasteGearSettingsBase):
     bl_label = "Paste"
     bl_options = {'UNDO'}
     
+    def can_paste_unused(self, context):
+        return False
+
     @classmethod
     def poll(cls, context):
         return context.scene is not None
