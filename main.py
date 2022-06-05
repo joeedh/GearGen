@@ -20,6 +20,7 @@ class RecalcAllGears(bpy.types.Operator):
     """Tooltip"""
     bl_idname = "object.geargen_recalc_all_gears"
     bl_label = "Recalc All Gears"
+    bl_options = {'UNDO'}
 
     @classmethod
     def poll(cls, context):
@@ -29,13 +30,110 @@ class RecalcAllGears(bpy.types.Operator):
         run(context)
         return {'FINISHED'}
 
+class RecalcGear(bpy.types.Operator):
+    """Tooltip"""
+    bl_idname = "object.geargen_recalc_gear"
+    bl_label = "Recalc Gear"
+    bl_options = {'UNDO'}
+
+    @classmethod
+    def poll(cls, context):
+        return context.active_object is not None
+
+    def execute(self, context):
+        ob = context.active_object
+        
+        geargen = ob.geargen
+        genGear(ob, context.scene)
+
+        return {'FINISHED'}
+
+class Clipboard:
+    def __init__(self):
+        self.clear()
+        
+    def clear(self):
+        self.props = {}
+        self.nonprops = {}
+
+
+clipboard = Clipboard()
+
+class CopyGearSettings(bpy.types.Operator):
+    """Tooltip"""
+    bl_idname = "object.geargen_copy_settings"
+    bl_label = "Copy To Clipboard"
+    bl_options = {'UNDO'}
+
+    @classmethod
+    def poll(cls, context):
+        return context.active_object is not None
+
+    def execute(self, context):
+        ob = context.active_object
+        geargen = ob.geargen
+
+        clipboard.clear()
+
+        for prop in myprops.PropNames:
+            clipboard.props[prop] = [prop in geargen.local_overrides, getattr(geargen, prop)]
+        
+        for prop in myprops.NonPropNames:
+            clipboard.nonprops[prop] = getattr(geargen, prop)
+
+        return {'FINISHED'}
+
+
+class PasteGearSettings(bpy.types.Operator):
+    """Tooltip"""
+    bl_idname = "object.geargen_paste_settings"
+    bl_label = "Paste"
+    bl_options = {'UNDO'}
+
+    @classmethod
+    def poll(cls, context):
+        return context.active_object is not None
+
+    def execute(self, context):
+        ob = context.active_object
+        geargen = ob.geargen
+
+        geargen.local_overrides = set()
+
+        if context.scene.geargen.paste_local_settings:
+            for nonprop, value in clipboard.nonprops.items():
+                setattr(geargen, nonprop, value)
+
+        for prop, item in clipboard.props.items():
+            print(prop, item)
+
+            setattr(geargen, prop, item[1])
+
+            # don't set override flags for non props
+            if prop in myprops.NonPropNames:
+                continue
+
+            if item[0] and prop not in geargen.local_overrides:
+                # bug in BPY, doesn't work
+                # geargen.local_overrides.add(prop) 
+
+                # workaround
+                geargen.local_overrides = set(geargen.local_overrides).union(set([prop]))
+            elif not item[0] and prop in geargen.local_overrides:
+                geargen.local_overrides.remove(prop)
+        
+        return {'FINISHED'}
+
+bpy_classes = [RecalcAllGears, CopyGearSettings, PasteGearSettings, RecalcGear]
+
 registered = False
 def register():
     global registered
     if registered: return
     registered = True
     
-    bpy.utils.register_class(RecalcAllGears)
+    for cls in bpy_classes:
+        bpy.utils.register_class(cls)
     myprops.register()
 
 def unregister():
@@ -43,7 +141,8 @@ def unregister():
     if not registered: return
     registered = False
     
-    bpy.utils.unregister_class(RecalcAllGears)
+    for cls in bpy_classes:
+        bpy.utils.unregister_class(cls)
    
 def on_update(self, context):
     if context.scene.geargen.auto_generate:

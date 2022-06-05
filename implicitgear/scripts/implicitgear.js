@@ -374,17 +374,17 @@ define([
                   //find distance of v2 to edge between v1 and v3
                   var v4 = tmp.load(v1).add(v2).mulScalar(0.5);
                   
-                  vec1.load(v1).sub(v2).normalize();
+                  vec1.load(v2).sub(v1).normalize();
                   vec2.load(v3).sub(v2).normalize();
                   
                   var err = v2.vectorDistance(v4); //vec1.dot(vec2);
-                  var dot = vec1.dot(vec2);
+                  var th = Math.acos(vec1.dot(vec2));
                   
                   //take angle into account too
-                  //err *= (1.0-Math.abs(dot))*0.3+0.7;
+                  err *= (1.0 + th*2.0)**4;
                   
                   //collapse, if small enough
-                  if (Math.abs(err) < 0.05) {
+                  if (Math.abs(err) < 0.06) {
                       dellist.push(v);
                       newmesh.makeEdge(v1, v3);
                   }
@@ -399,6 +399,8 @@ define([
             collapse();
           }
           
+          console.warn("TOTVERTS:", newmesh.verts.length);
+
           var this2 = this;
           function mirror() {
               //tag original geometry

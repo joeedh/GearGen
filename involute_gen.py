@@ -349,7 +349,7 @@ def smooth(bm, fac=1.0):
 
 def make_profile(profile, bm, netbm):
     cut_tooth(profile, bm, netbm)
-    bmesh.ops.remove_doubles(netbm, verts=netbm.verts, dist=0.05)
+    #xxx bmesh.ops.remove_doubles(netbm, verts=netbm.verts, dist=0.05)
     smooth(netbm, 0.1)
 
     minvx = None
@@ -421,7 +421,7 @@ def make_profile(profile, bm, netbm):
             netbm.verts.remove(v)
             continue
             
-    bmesh.ops.remove_doubles(netbm, verts=netbm.verts, dist=0.01)
+    #xxx bmesh.ops.remove_doubles(netbm, verts=netbm.verts, dist=0.01)
     
     #chop off outer verts
     for v in netbm.verts:
@@ -567,13 +567,14 @@ def finalgen(netbm, profile):
         tesswid = 0.025
       
         #merge any really small geometry
-        bmesh.ops.remove_doubles(netbm, verts=netbm.verts, dist=tesswid*0.95)
+        #xxx bmesh.ops.remove_doubles(netbm, verts=netbm.verts, dist=tesswid*0.95)
         
         for e in list(netbm.edges):
             l = (e.verts[1].co - e.verts[0].co).length
             if l < tesswid*2: continue
             
             cutedge(e, int(l / tesswid))
+        
         bmesh.ops.remove_doubles(netbm, verts=netbm.verts, dist=tesswid*4)
         
         for i in range(20):
@@ -590,7 +591,7 @@ def finalgen(netbm, profile):
         v.co += vrnd()*0.005;
     #"""
     
-    bmesh.ops.remove_doubles(netbm, verts=netbm.verts, dist=0.01)
+    #xxx bmesh.ops.remove_doubles(netbm, verts=netbm.verts, dist=0.01)
     bmesh.ops.triangle_fill(netbm, edges=netbm.edges, use_beauty=True)
     
     #for i, v in enumerate(netbm.verts):

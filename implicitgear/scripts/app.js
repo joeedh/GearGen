@@ -21,7 +21,7 @@ define([
       this.canvas = document.getElementById("canvas2d");
       this.g = this.canvas.getContext("2d");
       this.mesh = new mesh.Mesh();
-      this.numteeth = 13;
+      this.numteeth = 8;
       
       this.ctx = new toolsys.Context();
       this.toolstack = new toolsys.ToolStack();

@@ -69,6 +69,14 @@ PropNames = [
     "key_depth"
 ]
 
+NonPropNames = set([
+    "numteeth", 
+    "inner_gear_mode", 
+    "invert_helical", 
+    "inner_gear_depth",
+    "enabled"
+])
+
 PropBits = {}
 
 def makePropEnum():
@@ -148,13 +156,16 @@ class GearGenProfile (bpy.types.PropertyGroup):
     helical_on: bpy.props.BoolProperty(default=False, update=on_prop_update);
     
     backlash: bpy.props.FloatProperty(default=0.05, update=on_prop_update)
-    pitch_out: bpy.props.FloatProperty(default=-1) #used to tell the user final pitch circle radius
+    pitch_out: bpy.props.FloatProperty(default=-1, name="Pitch Radius", description="Final generated pitch radius.  \nGears should be spaced apart by the sums of their pitch radii") #used to tell the user final pitch circle radius
     numteeth: bpy.props.IntProperty(default=9, update=on_prop_update) #tell user what final number of teeth are, unless use_numteeth is true in which case this is the number of teeth
     use_numteeth: bpy.props.BoolProperty(default=False, update=on_prop_update);
     no_cutouts: bpy.props.BoolProperty(default=False, update=on_prop_update);
     
     pressure_angle: bpy.props.FloatProperty(default=20, update=on_prop_update)
     
+    # this is used by the copy/paste operators
+    paste_local_settings: bpy.props.BoolProperty(default=True) #, label="Copy Local Settings")
+
     def set_defaults(self):
         self.init = True
         self.scale = 1.0
@@ -249,7 +260,7 @@ def uifunc(self, context, gear):
     objectprop(context, row2, "no_cutouts")
         
     row = col.column()
-    row.operator("object.geargen_recalc_all_gears")
+    row.operator("object.geargen_recalc_gear")
     
 class GearPanel(bpy.types.Panel):    
     bl_label = "Gear Generation"
@@ -262,6 +273,13 @@ class GearPanel(bpy.types.Panel):
         layout = self.layout
         gear = context.scene.geargen
         
+        box = layout.box()
+        box.prop(context.scene.geargen, "paste_local_settings", text="Paste Local Settings")
+
+        row = box.row()
+        row.operator("object.geargen_copy_settings")
+        row.operator("object.geargen_paste_settings")
+
         uifunc(self, context, context.object.geargen)
 
 class SceneGearPanel(bpy.types.Panel):    

@@ -327,7 +327,7 @@ def genGear(ob, scene):
     ob.geargen.pitch_out = radius*ob.geargen.xy_scale
         
     #get rid of any stupidly dense geometry
-    bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=0.06)
+    bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=0.01)
     
     #final gear thickness
     thickness = getprop(ob, scene, "thickness")

@@ -1,7 +1,7 @@
 bl_info = {
     "name": "Gear Generator",
     "author": "Joseph Eagar",
-    "version": (0, 3),
+    "version": (0, 4),
     "blender": (2, 80, 0),
     "location": "Properties > Object > GearGen",
     "description": "Generates gears.  Replaces existing mesh data.",
