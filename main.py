@@ -59,21 +59,14 @@ class Clipboard:
 
 clipboard = Clipboard()
 
-class CopyGearSettings(bpy.types.Operator):
-    """Tooltip"""
-    bl_idname = "object.geargen_copy_settings"
+class CopyGearSettingsBase:
     bl_label = "Copy To Clipboard"
-    bl_options = {'UNDO'}
 
-    @classmethod
-    def poll(cls, context):
-        return context.active_object is not None
+    def get_geargen(self, context):
+        pass
 
     def execute(self, context):
-        if type(self) == CopyGearSettings:
-            geargen = context.active_object.geargen
-        else:
-            geargen = context.scene.geargen
+        geargen = self.get_geargen(context)
 
         clipboard.clear()
 
@@ -85,7 +78,18 @@ class CopyGearSettings(bpy.types.Operator):
 
         return {'FINISHED'}
 
-class SceneCopyGearSettings(CopyGearSettings):
+class CopyGearSettings(bpy.types.Operator, CopyGearSettingsBase):
+    """Tooltip"""
+    bl_idname = "object.geargen_copy_settings"
+    
+    @classmethod
+    def poll(cls, context):
+        return context.active_object is not None
+
+    def get_geargen(self, context):
+        return context.active_object.geargen
+
+class SceneCopyGearSettings(bpy.types.Operator, CopyGearSettingsBase):
     """Tooltip"""
     bl_idname = "scene.geargen_copy_settings"
     
@@ -93,15 +97,11 @@ class SceneCopyGearSettings(CopyGearSettings):
     def poll(cls, context):
         return context.scene is not None
 
-class PasteGearSettings(bpy.types.Operator):
-    """Tooltip"""
-    bl_idname = "object.geargen_paste_settings"
-    bl_label = "Paste"
-    bl_options = {'UNDO'}
+    def get_geargen(self, context):
+        return context.scene.geargen
 
-    @classmethod
-    def poll(cls, context):
-        return context.active_object is not None
+class PasteGearSettingsBase:
+    bl_label = "Paste"
 
     def execute(self, context):
         if type(self) == PasteGearSettings:
@@ -135,7 +135,17 @@ class PasteGearSettings(bpy.types.Operator):
         
         return {'FINISHED'}
 
-class ScenePasteGearSettings(PasteGearSettings):
+class PasteGearSettings(bpy.types.Operator, PasteGearSettingsBase):
+    """Tooltip"""
+    bl_idname = "object.geargen_paste_settings"
+    bl_label = "Paste"
+    bl_options = {'UNDO'}
+    
+    @classmethod
+    def poll(cls, context):
+        return context.active_object is not None
+
+class ScenePasteGearSettings(bpy.types.Operator, PasteGearSettingsBase):
     """Tooltip"""
     bl_idname = "scene.geargen_paste_settings"
     bl_label = "Paste"
@@ -171,7 +181,9 @@ def unregister():
     
     for cls in bpy_classes:
         bpy.utils.unregister_class(cls)
-   
+
+    myprops.unregister()
+
 def on_update(self, context):
     if context.scene.geargen.auto_generate:
         run()
