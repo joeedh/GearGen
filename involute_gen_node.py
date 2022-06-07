@@ -159,6 +159,8 @@ def genGear(profile):
     
     vs = []
     lines = stdout.split("\n")
+    print(stdout)
+    
     for l in lines:
         l = l.strip()
         if l == "": continue
@@ -170,6 +172,8 @@ def genGear(profile):
             print("Found pitch radius:", l)
             profile.radius = float(l[6:].strip())
         else:
+            print(l)
+
             x, y = [float(f) for f in l.split(" ")]
             v = bm.verts.new(Vector([x, y, 0]))
 

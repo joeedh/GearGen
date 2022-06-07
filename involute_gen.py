@@ -48,7 +48,7 @@ class Profile:
         self.numteeth = numteeth
         self.pressureth = pressureth
 
-        self.tdepth = (twid * 2 / pi) * 1.0 * depthscale
+        self.tdepth = (twid * 2 / pi) * depthscale
         self.radius = ((twid * 2) * numteeth) / pi / 2
         
         #used by trap() function

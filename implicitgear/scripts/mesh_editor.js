@@ -17,7 +17,7 @@ define([
   var SELECT = 1, ACTIVE = 2, HIGHLIGHT = 4;
   
   var MeshColors = exports.MeshColors = {
-    0 : [0.23, 0.23, 0.23, 1.0],
+    0 : [0.5, 0.5, 0.5, 1.0],
     1 : [0.3, 0.5, 1.0, 1.0],  // SELECT
     2 : [1.0, 0.25, 0.1, 1.0], // ACTIVE
     3 : [1.0, 0.5, 0.75, 1.0], // ACTIVE+SELECT
@@ -91,7 +91,6 @@ define([
     }
     
     draw(ctx, canvas, g) {
-      g.clearRect(0, 0, canvas.width, canvas.height);
       this.ctx = ctx;
       
       this.draw_mesh(ctx.mesh, canvas, g);

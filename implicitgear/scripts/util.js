@@ -8,6 +8,16 @@ define([
 
   var exports = _util = {};
 
+  exports.list = function(iter) {
+    let ret = [];
+    
+    for(let item of iter) {
+      ret.push(item);
+    }
+
+    return ret;
+  }
+
   //helper table to iterate over circle inside a 2d grid
   var _searchoff_cache = {};
   var searchoff = exports.searchoff = function(n) {
