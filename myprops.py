@@ -231,7 +231,17 @@ def uifunc(self, context, gear):
     objectprop(context, col2, "helical_on")
     objectprop(context, col2, "double_helical")
     objectprop(context, col2, "helical_angle")
-    objectprop(context, col2, "thickness")
+    objectprop(context, col2, "herring_shape")
+    objectprop(context, col2, "subdivisions")
+
+    objectprop(context, col2, "herringchannel_on")
+    objectprop(context, col2, "herringchannel_width")
+    objectprop(context, col2, "herringchannel_blend")
+    objectprop(context, col2, "herringchannel_depth")
+
+    objectprop(context, col2, "taper_on")
+    objectprop(context, col2, "taper_amount")
+    objectprop(context, col2, "taper_height")
     
     col2 = row.column()
     objectprop(context, col2, "pressure_angle")
