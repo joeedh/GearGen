@@ -116,17 +116,17 @@ class GearGenProfile (bpy.types.PropertyGroup):
     auto_generate: bpy.props.BoolProperty(default=False)
     
     depth: bpy.props.FloatProperty(default=1.0, update=on_prop_update)
-    thickness: bpy.props.FloatProperty(default=4, update=on_prop_update)
-    modulus: bpy.props.FloatProperty(default=-1.0, update=on_prop_update)
+    thickness: bpy.props.FloatProperty(default=6, update=on_prop_update)
+    modulus: bpy.props.FloatProperty(default=2.0, update=on_prop_update)
 
     init: bpy.props.BoolProperty(update=on_prop_update)
 
     enabled: bpy.props.BoolProperty(update=on_prop_update)
-    genshaft: bpy.props.BoolProperty(update=on_prop_update)
-    shaft_diameter: bpy.props.FloatProperty(default=4, update=on_prop_update)
+    genshaft: bpy.props.BoolProperty(default=True, update=on_prop_update)
+    shaft_diameter: bpy.props.FloatProperty(default=3, update=on_prop_update)
     zoff: bpy.props.FloatProperty(update=on_prop_update)
     
-    spacer_on: bpy.props.BoolProperty(default=True, update=on_prop_update)
+    spacer_on: bpy.props.BoolProperty(default=False, update=on_prop_update)
     spacer_width: bpy.props.FloatProperty(default=1.5, update=on_prop_update)
     spacer_thick: bpy.props.FloatProperty(default=1, update=on_prop_update)
     spacer_height: bpy.props.FloatProperty(default=1.5, update=on_prop_update)
@@ -134,19 +134,19 @@ class GearGenProfile (bpy.types.PropertyGroup):
     xy_scale: bpy.props.FloatProperty(default=1.0, update=on_prop_update)
  
     double_helical: bpy.props.BoolProperty(update=on_prop_update)
-    helical_angle: bpy.props.FloatProperty(default=1.0, update=on_prop_update)
-    subdivisions: bpy.props.IntProperty(default=8, update=on_prop_update)
+    helical_angle: bpy.props.FloatProperty(default=3.0, update=on_prop_update)
+    subdivisions: bpy.props.IntProperty(default=16, update=on_prop_update)
 
-    taper_on: bpy.props.BoolProperty(update=on_prop_update)
-    taper_amount: bpy.props.FloatProperty(default=0.75, update=on_prop_update)
-    taper_height: bpy.props.FloatProperty(default=1.25, update=on_prop_update)
+    taper_on: bpy.props.BoolProperty(default=True, update=on_prop_update)
+    taper_amount: bpy.props.FloatProperty(default=0.5, update=on_prop_update)
+    taper_height: bpy.props.FloatProperty(default=0.7, update=on_prop_update)
 
     invert_helical: bpy.props.BoolProperty(default=False, update=on_prop_update) #local property
 
-    herringchannel_on: bpy.props.BoolProperty(default=False, update=on_prop_update)
-    herringchannel_width: bpy.props.FloatProperty(default=0.5, update=on_prop_update)
-    herringchannel_blend: bpy.props.FloatProperty(default=0.5, update=on_prop_update)
-    herringchannel_depth: bpy.props.FloatProperty(default=1.0, update=on_prop_update)
+    herringchannel_on: bpy.props.BoolProperty(default=True, update=on_prop_update)
+    herringchannel_width: bpy.props.FloatProperty(default=0.3, update=on_prop_update)
+    herringchannel_blend: bpy.props.FloatProperty(default=0.7, update=on_prop_update)
+    herringchannel_depth: bpy.props.FloatProperty(default=0.2, update=on_prop_update)
     
     inner_gear_mode: bpy.props.BoolProperty(default=False, update=on_prop_update) #local property
     inner_gear_depth: bpy.props.FloatProperty(default=4.0, update=on_prop_update)
@@ -172,7 +172,7 @@ class GearGenProfile (bpy.types.PropertyGroup):
         self.taper = 0.2
         self.genshaft = True
         self.zoff = 0
-        self.spacer_on = True
+        self.spacer_on = False
         self.spacer_width = 1.5
         self.spacer_thick = 1
         
